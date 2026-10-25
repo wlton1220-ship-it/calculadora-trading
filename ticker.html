@@ -2,14 +2,21 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Ticker de Precios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticker</title>
     <style>
         html, body {
             margin: 0;
             padding: 0;
-            background-color: #191919; /* Fondo oscuro de Notion para evitar el bloque blanco */
-            height: 100%;
+            background-color: #191919;
+            height: 100vh;
+            width: 100vw;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+        .tradingview-widget-container {
+            width: 100%;
         }
     </style>
 </head>
@@ -38,8 +45,8 @@
         }
       ],
       "showSymbolLogo": true,
-      "isTransparent": false,
-      "displayMode": "adaptive",
+      "isTransparent": true,
+      "displayMode": "regular",
       "colorTheme": "dark",
       "locale": "es"
     }
