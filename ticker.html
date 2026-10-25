@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticker de Precios</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: transparent; 
+            overflow: hidden; 
+        }
+    </style>
+</head>
+<body>
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+      "symbols": [
+        {
+          "proName": "OANDA:NAS100USD",
+          "title": "Nasdaq 100"
+        },
+        {
+          "proName": "OANDA:XAUUSD",
+          "title": "Oro (XAU/USD)"
+        },
+        {
+          "proName": "FOREXCOM:SPXUSD",
+          "title": "S&P 500"
+        },
+        {
+          "proName": "FX:EURUSD",
+          "title": "EUR/USD"
+        },
+        {
+          "proName": "BINANCE:BTCUSDT",
+          "title": "Bitcoin"
+        }
+      ],
+      "showSymbolLogo": true,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "es"
+    }
+      </script>
+    </div>
+    <!-- TradingView Widget END -->
+</body>
+</html>
