@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticker de Precios</title>
     <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            background-color: transparent; 
-            overflow: hidden; 
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #191919; /* Fondo oscuro de Notion para evitar el bloque blanco */
+            height: 100%;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -22,27 +22,23 @@
       "symbols": [
         {
           "proName": "OANDA:NAS100USD",
-          "title": "Nasdaq 100"
+          "title": "NASDAQ 100"
         },
         {
           "proName": "OANDA:XAUUSD",
-          "title": "Oro (XAU/USD)"
+          "title": "ORO"
         },
         {
           "proName": "FOREXCOM:SPXUSD",
           "title": "S&P 500"
         },
         {
-          "proName": "FX:EURUSD",
-          "title": "EUR/USD"
-        },
-        {
           "proName": "BINANCE:BTCUSDT",
-          "title": "Bitcoin"
+          "title": "BITCOIN"
         }
       ],
       "showSymbolLogo": true,
-      "isTransparent": true,
+      "isTransparent": false,
       "displayMode": "adaptive",
       "colorTheme": "dark",
       "locale": "es"
