@@ -4,178 +4,176 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Trading</title>
-    <!-- Cargamos Tailwind CSS para los estilos -->
+    <!-- Tailwind CSS para el diseño minimalista -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tipografía Inter (Estilo Notion) -->
+    <!-- Tipografía de Notion -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        notionBg: '#191919',
-                        notionCard: '#202020',
-                        notionBorder: '#2f2f2f',
-                        notionText: '#d4d4d4',
-                        notionInput: '#2a2a2a',
-                        profit: '#2ea043',
-                        loss: '#f85149'
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        /* Estilos base para scrollbar y selección */
-        body { margin: 0; height: 100vh; display: flex; flex-direction: column; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #191919; 
+            color: #d4d4d4; 
             margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
+        /* Estilo de los inputs para que parezcan de Notion */
+        input, select { 
+            background-color: #202020; 
+            border: 1px solid #333; 
+            color: #fff; 
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus { 
+            outline: none; 
+            border-color: #5a5a5a; 
+        }
+        /* Ocultar las flechas de los campos numéricos */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
         }
     </style>
 </head>
-<body class="bg-notionBg text-notionText font-sans p-4 sm:p-6 flex justify-center items-start overflow-y-auto">
+<body class="p-4 w-full">
 
-    <div class="w-full max-w-md bg-notionCard border border-notionBorder rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-6 text-white text-center">Calculadora de Posición</h2>
-        
-        <form id="calcForm" class="space-y-4">
-            <!-- Balance y Riesgo -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Balance Cuenta ($)</label>
-                    <input type="number" id="balance" step="any" placeholder="10000" class="w-full bg-notionInput border border-notionBorder rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-400 transition-colors">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Riesgo (%)</label>
-                    <input type="number" id="riskPct" step="any" placeholder="1.0" value="1" class="w-full bg-notionInput border border-notionBorder rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-400 transition-colors">
-                </div>
+    <div class="max-w-md mx-auto w-full bg-[#191919] p-2">
+        <h2 class="text-sm font-semibold mb-5 text-[#888] uppercase tracking-wider text-center">Gestión de Riesgo</h2>
+
+        <!-- Ajustes de Cuenta -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block text-xs text-gray-500 mb-1">Balance (USD)</label>
+                <input type="number" id="balance" class="w-full px-3 py-2 rounded text-sm" value="1000" placeholder="Tu capital">
             </div>
-
-            <!-- Precios -->
-            <div class="space-y-3 pt-2">
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Precio de Entrada</label>
-                    <input type="number" id="entry" step="any" class="w-full bg-notionInput border border-notionBorder rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-400 transition-colors">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Stop Loss (SL)</label>
-                    <input type="number" id="stopLoss" step="any" class="w-full bg-notionInput border border-notionBorder border-l-2 border-l-loss rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-400 transition-colors">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-400 mb-1">Take Profit (TP)</label>
-                    <input type="number" id="takeProfit" step="any" class="w-full bg-notionInput border border-notionBorder border-l-2 border-l-profit rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-gray-400 transition-colors">
-                </div>
+            <div>
+                <label class="block text-xs text-gray-500 mb-1">Riesgo (%)</label>
+                <input type="number" id="risk" class="w-full px-3 py-2 rounded text-sm" value="1" step="0.1">
             </div>
-        </form>
+        </div>
 
-        <!-- Resultados -->
-        <div class="mt-8 p-4 bg-notionInput rounded-xl border border-notionBorder">
-            <h3 class="text-xs uppercase tracking-wider font-semibold text-gray-500 mb-3 text-center">Resultados</h3>
-            
-            <div class="space-y-3">
-                <div class="flex justify-between items-center pb-2 border-b border-notionBorder">
-                    <span class="text-sm text-gray-400">Riesgo de Capital</span>
-                    <span id="resRiskMoney" class="font-semibold text-loss">$ 0.00</span>
-                </div>
+        <!-- Selección de Activo -->
+        <div class="mb-4">
+            <label class="block text-xs text-gray-500 mb-1">Activo</label>
+            <select id="asset" class="w-full px-3 py-2 rounded text-sm cursor-pointer">
+                <option value="nasdaq">NASDAQ 100 (Puntos)</option>
+                <option value="gold">ORO / XAUUSD (Puntos / Dólares)</option>
+            </select>
+        </div>
+
+        <!-- Precios del Trade -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div>
+                <label class="block text-xs text-gray-500 mb-1">Entrada</label>
+                <input type="number" id="entry" class="w-full px-2 py-2 rounded text-sm text-center" placeholder="Ej: 20050">
+            </div>
+            <div>
+                <label class="block text-xs text-gray-500 mb-1">Stop Loss</label>
+                <input type="number" id="sl" class="w-full px-2 py-2 rounded text-sm text-center" placeholder="Ej: 20030">
+            </div>
+            <div>
+                <label class="block text-xs text-gray-500 mb-1">Take Profit</label>
+                <input type="number" id="tp" class="w-full px-2 py-2 rounded text-sm text-center" placeholder="Ej: 20110">
+            </div>
+        </div>
+
+        <!-- Panel de Resultados -->
+        <div class="bg-[#202020] rounded-lg border border-[#333] p-4 shadow-sm">
+            <div class="space-y-3 text-sm">
                 
-                <div class="flex justify-between items-center pb-2 border-b border-notionBorder">
-                    <span class="text-sm text-gray-400">Tamaño Posición (U)</span>
-                    <span id="resPositionSize" class="font-bold text-white text-lg">0</span>
+                <div class="flex justify-between items-center border-b border-[#333] pb-2">
+                    <span class="text-gray-400">Pérdida Máxima:</span>
+                    <span class="font-mono text-[#ff6b6b] font-medium" id="out-risk-usd">$0.00</span>
                 </div>
-                
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-400">Ratio Riesgo/Beneficio</span>
-                    <span id="resRR" class="font-semibold text-gray-400">1 : 0.00</span>
+
+                <div class="flex justify-between items-center border-b border-[#333] pb-2">
+                    <span class="text-gray-400">Distancia de Stop:</span>
+                    <span class="font-mono text-white" id="out-sl-dist">0 pts</span>
                 </div>
+
+                <div class="flex justify-between items-center border-b border-[#333] pb-2">
+                    <span class="text-gray-400">Ratio Riesgo/Beneficio:</span>
+                    <span class="font-mono text-white font-medium" id="out-rr">-</span>
+                </div>
+
+                <div class="flex justify-between items-center pt-1">
+                    <span class="text-gray-300 font-medium">Tamaño de Posición:</span>
+                    <span class="font-mono text-[#4dabf7] font-bold text-lg" id="out-lots">0.00 <span class="text-xs font-normal text-gray-500">Lotes</span></span>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
-        // Obtener referencias a los inputs
-        const inputs = document.querySelectorAll('input[type="number"]');
-        const balanceInput = document.getElementById('balance');
-        const riskPctInput = document.getElementById('riskPct');
-        const entryInput = document.getElementById('entry');
-        const stopLossInput = document.getElementById('stopLoss');
-        const takeProfitInput = document.getElementById('takeProfit');
-
-        // Obtener referencias a los resultados
-        const resRiskMoney = document.getElementById('resRiskMoney');
-        const resPositionSize = document.getElementById('resPositionSize');
-        const resRR = document.getElementById('resRR');
-
-        // Función principal de cálculo
         function calculate() {
-            const balance = parseFloat(balanceInput.value) || 0;
-            const riskPct = parseFloat(riskPctInput.value) || 0;
-            const entry = parseFloat(entryInput.value) || 0;
-            const stopLoss = parseFloat(stopLossInput.value) || 0;
-            const takeProfit = parseFloat(takeProfitInput.value) || 0;
+            // Obtener valores de los inputs
+            const balance = parseFloat(document.getElementById('balance').value);
+            const riskPct = parseFloat(document.getElementById('risk').value);
+            const asset = document.getElementById('asset').value;
+            const entry = parseFloat(document.getElementById('entry').value);
+            const sl = parseFloat(document.getElementById('sl').value);
+            const tp = parseFloat(document.getElementById('tp').value);
 
-            // 1. Calcular riesgo en dinero
-            const riskMoney = balance * (riskPct / 100);
-            resRiskMoney.textContent = `$ ${riskMoney.toFixed(2)}`;
+            if(isNaN(balance) || isNaN(riskPct)) return;
 
-            // 2. Calcular tamaño de la posición
-            let positionSize = 0;
-            let riskPerUnit = 0;
+            // 1. Calcular Riesgo en Dólares
+            const riskUsd = balance * (riskPct / 100);
+            document.getElementById('out-risk-usd').innerText = '$' + riskUsd.toFixed(2);
 
-            if (entry > 0 && stopLoss > 0 && entry !== stopLoss) {
-                // Math.abs maneja automáticamente si es un trade en Largo (Long) o Corto (Short)
-                riskPerUnit = Math.abs(entry - stopLoss);
-                positionSize = riskMoney / riskPerUnit;
-                
-                // Formateamos para mostrar hasta 4 decimales si es necesario (útil para crypto)
-                // Si es un número mayor a 10, mostramos menos decimales
-                if(positionSize > 100) {
-                    resPositionSize.textContent = positionSize.toFixed(2);
-                } else {
-                    resPositionSize.textContent = positionSize.toFixed(4).replace(/\.?0+$/, ''); // Elimina ceros extra
-                }
-            } else {
-                resPositionSize.textContent = "0";
+            if(isNaN(entry) || isNaN(sl) || entry === sl) {
+                document.getElementById('out-sl-dist').innerText = '0 pts';
+                document.getElementById('out-rr').innerText = '-';
+                document.getElementById('out-lots').innerHTML = '0.00 <span class="text-xs font-normal text-gray-500">Lotes</span>';
+                return;
             }
 
-            // 3. Calcular Ratio Riesgo/Beneficio (RR)
-            if (entry > 0 && stopLoss > 0 && takeProfit > 0 && riskPerUnit > 0) {
-                const rewardPerUnit = Math.abs(takeProfit - entry);
-                const rr = rewardPerUnit / riskPerUnit;
+            // 2. Calcular Distancia del Stop Loss en puntos absolutos
+            const slDist = Math.abs(entry - sl);
+            document.getElementById('out-sl-dist').innerText = slDist.toFixed(2) + ' pts';
+
+            // 3. Calcular Ratio Riesgo/Beneficio
+            if(!isNaN(tp) && tp !== entry) {
+                const tpDist = Math.abs(tp - entry);
+                const rr = tpDist / slDist;
                 
-                resRR.textContent = `1 : ${rr.toFixed(2)}`;
+                const rrEl = document.getElementById('out-rr');
+                rrEl.innerText = '1 : ' + rr.toFixed(2);
                 
-                // Colorear el RR basado en si es bueno (>1) o malo (<1)
-                if (rr >= 1) {
-                    resRR.className = "font-semibold text-profit";
-                } else if (rr > 0) {
-                    resRR.className = "font-semibold text-loss";
+                // Cambiar a color verde si el ratio es 1:2 o mejor
+                if (rr >= 2) {
+                    rrEl.classList.add('text-[#51cf66]');
+                    rrEl.classList.remove('text-white');
                 } else {
-                    resRR.className = "font-semibold text-gray-400";
+                    rrEl.classList.add('text-white');
+                    rrEl.classList.remove('text-[#51cf66]');
                 }
             } else {
-                resRR.textContent = "1 : 0.00";
-                resRR.className = "font-semibold text-gray-400";
+                document.getElementById('out-rr').innerText = '-';
             }
+
+            // 4. Calcular Lotaje (Tamaño de posición)
+            let lots = 0;
+            if(asset === 'nasdaq') {
+                // Fórmula Nasdaq: 1 lote = 1$ por punto de movimiento
+                lots = riskUsd / slDist;
+            } else if (asset === 'gold') {
+                // Fórmula Oro: 1 lote estándar = 100 onzas. 1 punto ($1) de movimiento = $100
+                lots = riskUsd / (slDist * 100);
+            }
+
+            // Mostrar lotaje con 2 decimales
+            document.getElementById('out-lots').innerHTML = `${lots.toFixed(2)} <span class="text-xs font-normal text-gray-500">Lotes</span>`;
         }
 
-        // Añadir el listener para que se actualice al escribir
-        inputs.forEach(input => {
-            input.addEventListener('input', calculate);
-        });
-
-        // Calcular estado inicial
+        // Escuchar cambios en todos los inputs para recalcular en tiempo real
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => input.addEventListener('input', calculate));
+        
+        // Ejecutar un cálculo inicial al cargar
         calculate();
     </script>
 </body>
